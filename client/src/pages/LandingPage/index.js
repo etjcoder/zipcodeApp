@@ -3,7 +3,8 @@ import "./style.css";
 import Modal from 'react-modal';
 import Nav from '../../components/Nav';
 import API from "../../utils/API";
-import QuoteCard from '../../components/QuoteCard';
+// import PlacesAutocomplete from 'react-places-autocomplete';
+// import { geocodeByAddress, geocodeByPlaceId, getLatLng} from 'react-places-autocomplete';
 
 const customStyles = {
     content: {
@@ -23,7 +24,12 @@ class LandingPage extends Component {
         adminModalIsOpen: false,
         finishModalIsOpen: false,
         zipCode: "",
-        zipAddress: []
+        zipAddress: [],
+        streetAddress: "",
+        houseNumber: "",
+        city: "",
+        state: "",
+        zipOptions: null
     }
 
     handleInputChange = event => {
@@ -33,6 +39,13 @@ class LandingPage extends Component {
         })
         setTimeout(() => { this.handleInputCheck() }, 500)
     };
+
+    handleAddressInput = event => {
+        const { name, value } = event.target;
+        this.setState({
+            [name]: value
+        })
+    }
 
     handleInputCheck = () => {
 
@@ -46,6 +59,12 @@ class LandingPage extends Component {
                 setTimeout(() => { this.reviewAddresses() }, 1500)
             }).catch(err => {
                 console.log("No Zipcodes Found")
+                this.setState({
+                    zipAddresses: "",
+                    zipOptions: "",
+                    city: "",
+                    state: ""
+                })
                 console.log(err)
             })
 
@@ -70,7 +89,9 @@ class LandingPage extends Component {
 
     displayZipOptions = () => {
         this.setState({
-            zipOptions: this.state.zipAddresses
+            zipOptions: this.state.zipAddresses,
+            city: "",
+            state: ""
         })
     }
 
@@ -83,9 +104,34 @@ class LandingPage extends Component {
                     state: this.state.zipOptions[i].State,
                     zipOptions: ""
                 })
-            } 
+            }
         }
 
+    }
+
+    mapAddress = (event) => {
+        event.preventDefault();
+        console.log("Mapping address: " + this.state.houseNumber + " " + this.state.streetAddress + " " + this.state.city + " " + this.state.state + ", " + this.state.zipCode)
+        var addressBody = {
+            number: this.state.houseNumber,
+            street: this.state.streetAddress,
+            suffix: this.state.streetSuffix,
+            city: this.state.city,
+            state: this.state.state,
+            zip: this.state.zip
+        }
+        API.findAddress(addressBody)
+            .then(res => {
+                console.log(res.data.results)
+
+                this.setState({
+                    addLong: res.data.results[0].geometry.location.lng,
+                    addLat: res.data.results[0].geometry.location.lat,
+                })
+
+            }).catch(err => {
+                console.log(err)
+            })
     }
 
     componentDidMount = () => {
@@ -193,7 +239,34 @@ class LandingPage extends Component {
 
                                 <div className="row">
                                     <div className="col-12">
-                                        {this.state.city ? <h2>{this.state.city + ", " + this.state.state}</h2> : null}
+                                        {this.state.city ?
+                                            <h2>{this.state.city + ", " + this.state.state}</h2>
+                                            : null}
+                                    </div>
+                                </div>
+
+                                <div className="row">
+                                    <div className="col-12">
+                                        {this.state.city ?
+                                            <div className="col-12">
+                                                <form>
+
+                                                    <label>Street Address</label>
+                                                    <div className="form-row">
+                                                 
+                                                        <input style={{width: '20%'}}type="text" onChange={this.handleAddressInput} name="houseNumber" value={this.state.houseNumber} placeholder="123"/>
+                                                  
+                                                        <input style={{width: '60%'}}type="text" onChange={this.handleAddressInput} name="streetAddress" value={this.state.streetAddress} placeholder="Main"/>
+                                                     
+                                                       
+                                                        <input style={{width: '20%'}}type="text" onChange={this.handleAddressInput} name="streetSuffix" value={this.state.streetSuffix} placeholder="Street"/>
+                                                     
+                                                    </div>
+
+                                                    <button onClick={this.mapAddress} className="btn btn-warning">Map It!</button>
+                                                </form>
+
+                                            </div> : null}
                                     </div>
                                 </div>
 
@@ -203,8 +276,8 @@ class LandingPage extends Component {
                                             <div className="col-12"><h4>Please select the City you'd like to view</h4></div>
                                             <>
                                                 {this.state.zipOptions.map(zipOption => (
-                                                    <div className="col-lg-3 col-md-6">
-                                                        <button style={{margin: '5px', width: '100%'}} className="btn btn-light" onClick={() => this.selectOption(zipOption._id)}>{zipOption.City}</button>
+                                                    <div className="col-lg-3 col-md-6" key={zipOption._id}>
+                                                        <button style={{ margin: '5px', width: '100%' }} className="btn btn-light" onClick={() => this.selectOption(zipOption._id)}>{zipOption.City}</button>
                                                     </div>
                                                 ))}
 
