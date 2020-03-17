@@ -15,7 +15,7 @@ class Footer extends Component {
         return (
 
             <div className="footer" style={{ width: '100%', height: '100px', backgroundColor: '#00008B', textAlign: 'center' }}>
-                <p style={{ color: 'white', textAlign: 'center', fontSize: '12px', padding: '25px' }}><span><a href="https://fawncircleinsurance.com/" style={{ color: 'white', fontSize: '12px' }}>Quotes Provided by Fawn Circle, LLC a local Independent Insurance Agency, who writes for MetLife Auto and Home</a></span></p>
+                <p style={{ color: 'white', textAlign: 'center', fontSize: '12px', padding: '25px' }}><span><a href="https://evancleary.com/" style={{ color: 'white', fontSize: '12px' }}>ECEnterprises, LLC</a></span></p>
             </div>
         );
     }

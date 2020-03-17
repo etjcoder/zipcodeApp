@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import LandingPage from "./pages/LandingPage"
 import AdminPage from "./pages/AdminPage"
 import Footer from './components/Footer'
-
+import Nav from './components/Nav'
 
 class App extends Component {
 
@@ -44,6 +44,7 @@ class App extends Component {
     return (
       <Router>
         <div className="main">
+          <Nav />
 
           <Switch>
             <Route exact path="/">

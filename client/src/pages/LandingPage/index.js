@@ -3,6 +3,8 @@ import "./style.css";
 import Modal from 'react-modal';
 import Nav from '../../components/Nav';
 import API from "../../utils/API";
+import GoogleMapReact from 'google-map-react';
+import Marker from '../../components/Marker';
 // import PlacesAutocomplete from 'react-places-autocomplete';
 // import { geocodeByAddress, geocodeByPlaceId, getLatLng} from 'react-places-autocomplete';
 
@@ -29,7 +31,8 @@ class LandingPage extends Component {
         houseNumber: "",
         city: "",
         state: "",
-        zipOptions: null
+        zipOptions: null,
+        showMap: false
     }
 
     handleInputChange = event => {
@@ -127,6 +130,7 @@ class LandingPage extends Component {
                 this.setState({
                     addLong: res.data.results[0].geometry.location.lng,
                     addLat: res.data.results[0].geometry.location.lat,
+                    showMap: true
                 })
 
             }).catch(err => {
@@ -214,7 +218,7 @@ class LandingPage extends Component {
     render() {
         return (
 
-            <div className="container-fluid" style={{ background: '#FFF8DC', padding: '0', height: '100%', color: 'whitesmoke' }}>
+            <div className="container-fluid" style={{ background: '#FFF8DC', padding: '0', height: '1600px', color: 'whitesmoke' }}>
 
 
                 <div className="row" style={{ padding: '5%' }}>
@@ -270,6 +274,8 @@ class LandingPage extends Component {
                                     </div>
                                 </div>
 
+                               
+
                                 <div className="row">
                                     {this.state.zipOptions ?
                                         <>
@@ -286,6 +292,23 @@ class LandingPage extends Component {
 
 
                                         : null}
+                                </div>
+
+                                <div className="row">
+                                    <div className="col-12" style={{width: '500px', height: '500px'}}>
+                                        {this.state.showMap ? 
+
+                                        <GoogleMapReact
+                                            bootstrapURLKeys={ {key: '[API_KEY]'}}
+                                            defaultCenter={{ lat: 39.952583, lng: -75.165222}}
+                                            defaultZoom={5}
+                                        >
+                                            <Marker lat={this.state.addLat} lng={this.state.addLong} text="Address Searched"/>
+
+                                        </GoogleMapReact>
+                                    
+                                        : null}
+                                    </div>
                                 </div>
 
                             </div>
