@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(routes);
 
-mongoose.connect(process.env.MONGODB_URI ||"mongodb://localhost/zipcodedb");
+mongoose.connect(process.env.MONGODB_URI ||"mongodb://ejcoder:seaisle1@ds013991.mlab.com:13991/heroku_bdv114k3");
 
 // mongodb://fawncirclellc:fc123999@ds161335.mlab.com:61335/heroku_r8nb83jj
 

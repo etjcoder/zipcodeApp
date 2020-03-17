@@ -4,7 +4,6 @@ import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 // import Button from 'react-bootstrap/Button';
 import LandingPage from "./pages/LandingPage"
-import AdminPage from "./pages/AdminPage"
 import Footer from './components/Footer'
 import Nav from './components/Nav'
 
