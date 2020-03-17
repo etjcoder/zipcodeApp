@@ -31,7 +31,7 @@ class LandingPage extends Component {
         this.setState({
             [name]: value
         })
-        setTimeout(() => {this.handleInputCheck()}, 500)
+        setTimeout(() => { this.handleInputCheck() }, 500)
     };
 
     handleInputCheck = () => {
@@ -43,10 +43,48 @@ class LandingPage extends Component {
                 this.setState({
                     zipAddresses: res.data
                 })
+                setTimeout(() => { this.reviewAddresses() }, 1500)
             }).catch(err => {
                 console.log("No Zipcodes Found")
                 console.log(err)
             })
+
+    }
+
+    reviewAddresses = () => {
+
+        if (this.state.zipAddresses.length > 1) {
+            this.displayZipOptions()
+
+        } else if (this.state.zipAddresses.length === 1) {
+            this.setState({
+                city: this.state.zipAddresses[0].City,
+                state: this.state.zipAddresses[0].State,
+                zipOptions: ""
+            })
+
+        } else {
+            console.log("No addresses found, you should NOT see this error")
+        }
+    }
+
+    displayZipOptions = () => {
+        this.setState({
+            zipOptions: this.state.zipAddresses
+        })
+    }
+
+    selectOption = (id) => {
+
+        for (var i = 0; i < this.state.zipOptions.length; i++) {
+            if (this.state.zipOptions[i]._id === id) {
+                this.setState({
+                    city: this.state.zipOptions[i].City,
+                    state: this.state.zipOptions[i].State,
+                    zipOptions: ""
+                })
+            } 
+        }
 
     }
 
@@ -130,20 +168,55 @@ class LandingPage extends Component {
     render() {
         return (
 
-            <div className="container-fluid" style={{ background: '#FFF8DC', padding: '0', height: '100%' }}>
-                
+            <div className="container-fluid" style={{ background: '#FFF8DC', padding: '0', height: '100%', color: 'whitesmoke' }}>
+
 
                 <div className="row" style={{ padding: '5%' }}>
                     <div className="col-md-2"></div>
                     <div className="col-md-8">
-                        <div className="card bg-primary">
+                        <div className="card bg-primary" style={{ padding: '50px' }}>
+                            <div className="card-header">
+                                <h3>Address Lookup by Zipcode</h3>
+                            </div>
+                            <div className="card-body">
 
 
+                                <div className="row">
+                                    <div className="col-12">
+                                        <form>
+                                            <label>Enter Zipcode</label>
+                                            <input type="number" onChange={this.handleInputChange} name="zipCode" value={this.state.zipCode} />
+                                        </form>
+                                    </div>
 
-                            <form>
-                                <label>Enter Zipcode</label>
-                                <input type="number" onChange={this.handleInputChange} name="zipCode" value={this.state.zipCode} />
-                            </form>
+                                </div>
+
+                                <div className="row">
+                                    <div className="col-12">
+                                        {this.state.city ? <h2>{this.state.city + ", " + this.state.state}</h2> : null}
+                                    </div>
+                                </div>
+
+                                <div className="row">
+                                    {this.state.zipOptions ?
+                                        <>
+                                            <div className="col-12"><h4>Please select the City you'd like to view</h4></div>
+                                            <>
+                                                {this.state.zipOptions.map(zipOption => (
+                                                    <div className="col-lg-3 col-md-6">
+                                                        <button style={{margin: '5px', width: '100%'}} className="btn btn-light" onClick={() => this.selectOption(zipOption._id)}>{zipOption.City}</button>
+                                                    </div>
+                                                ))}
+
+                                            </>
+                                        </>
+
+
+                                        : null}
+                                </div>
+
+                            </div>
+                            <br />
                         </div>
 
 
@@ -154,7 +227,7 @@ class LandingPage extends Component {
                 </div>
 
 
-               
+
 
                 {/* Admin Login Modal */}
 
