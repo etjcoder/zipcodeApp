@@ -299,7 +299,7 @@ class LandingPage extends Component {
                                         {this.state.showMap ? 
 
                                         <GoogleMapReact
-                                            bootstrapURLKeys={ {key: '[API_KEY]'}}
+                                            bootstrapURLKeys={ {key: 'AIzaSyDZaPFIcx5Rcb3LH6NME4Z6-_wBjr2K338'}}
                                             defaultCenter={{ lat: 39.952583, lng: -75.165222}}
                                             defaultZoom={5}
                                         >
