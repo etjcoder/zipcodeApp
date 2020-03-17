@@ -16,7 +16,7 @@ class FawnNav extends Component {
 
             <nav className="navbar navbar-expand-lg navbar-primary bg-primary" style={{textAlign: 'center'}}>
 
-                <h3 className="text-white" style={{textAlign: 'center'}}>M E T L I F E | Auto and Home Quote Request</h3>
+                <h3 className="text-white" style={{textAlign: 'center'}}>A D D R E S S | Zipcode / Address Lookup Module</h3>
 
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,11 +32,11 @@ class FawnNav extends Component {
                 </div>
                             {/* <!-- Here's the magic. Add the .animate and .slide-in classes to your .dropdown-menu and you're all set! --> */}
                             <div className="dropdown-menu dropdown-menu-right animate slideIn" aria-labelledby="navbarDropdown">
-                                <div className="dropdown-item">
+                                {/* <div className="dropdown-item">
                                 <button type="button" className="btn btn-success" onClick={this.props.showAdmin}>
                                     Admin Login</button>
                                 </div>
-                                <div className="dropdown-divider"></div>
+                                <div className="dropdown-divider"></div> */}
 
 
                                 <div className="dropdown-item">

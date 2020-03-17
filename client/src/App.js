@@ -46,16 +46,12 @@ class App extends Component {
         <div className="main">
 
           <Switch>
-            <Route exact path="/">              
+            <Route exact path="/">
               <LandingPage
               />
             </Route>
-            <Route exact path="/xbyMGrZ4XIFuk2GiPHta">
-              <AdminPage
-              />
-            </Route>
           </Switch>
-        
+
           <Footer />
         </div>
       </Router>
