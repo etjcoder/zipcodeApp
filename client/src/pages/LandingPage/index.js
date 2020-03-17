@@ -22,9 +22,6 @@ const customStyles = {
 class LandingPage extends Component {
 
     state = {
-        editModalIsOpen: false,
-        adminModalIsOpen: false,
-        finishModalIsOpen: false,
         zipCode: "",
         zipAddress: [],
         streetAddress: "",
@@ -35,14 +32,18 @@ class LandingPage extends Component {
         showMap: false
     }
 
+    // Handles the state change when user interacts with inputs
+
     handleInputChange = event => {
         const { name, value } = event.target;
         this.setState({
             [name]: value
         })
+        // Checks Database immediately for a match
         setTimeout(() => { this.handleInputCheck() }, 500)
     };
 
+    // Similiar to function above but doesn't trigger 'handleInputCheck'
     handleAddressInput = event => {
         const { name, value } = event.target;
         this.setState({
@@ -50,6 +51,7 @@ class LandingPage extends Component {
         })
     }
 
+    // Handle Input check queries DB for a match and returns array of matched addresses
     handleInputCheck = () => {
 
         API.findZip(this.state.zipCode)
@@ -59,6 +61,7 @@ class LandingPage extends Component {
                 this.setState({
                     zipAddresses: res.data
                 })
+                // This is a secondary function that reviews the data returned and acts accordingly
                 setTimeout(() => { this.reviewAddresses() }, 1500)
             }).catch(err => {
                 console.log("No Zipcodes Found")
@@ -73,6 +76,7 @@ class LandingPage extends Component {
 
     }
 
+    // This checks if there is more than one result, and if so displays options
     reviewAddresses = () => {
 
         if (this.state.zipAddresses.length > 1) {
@@ -90,6 +94,7 @@ class LandingPage extends Component {
         }
     }
 
+    // This actually displays the options in the state
     displayZipOptions = () => {
         this.setState({
             zipOptions: this.state.zipAddresses,
@@ -98,6 +103,7 @@ class LandingPage extends Component {
         })
     }
 
+    // This is triggered when a user selects on of the many options available
     selectOption = (id) => {
 
         for (var i = 0; i < this.state.zipOptions.length; i++) {
@@ -112,6 +118,7 @@ class LandingPage extends Component {
 
     }
 
+    // This is where the values saved in state is used to get a Longitude and Latitude using Geocoder API from Google Maps
     mapAddress = (event) => {
         event.preventDefault();
         console.log("Mapping address: " + this.state.houseNumber + " " + this.state.streetAddress + " " + this.state.city + " " + this.state.state + ", " + this.state.zipCode)
@@ -138,82 +145,6 @@ class LandingPage extends Component {
             })
     }
 
-    componentDidMount = () => {
-        console.log("Landing Page")
-    }
-
-    onAfterOpen = () => {
-        console.log("Modal Is Opened")
-
-    }
-
-
-
-    openAdminModal = () => {
-        this.setState({
-            adminModalIsOpen: true
-        })
-    }
-
-    closeAdminModal = () => {
-        this.setState({
-            adminModalIsOpen: false
-        })
-    }
-
-    // submitRequest = (event) => {
-    //     event.preventDefault();
-
-    //     var requestData = {
-    //         projName: this.state.projectName,
-    //         projDesc: this.state.projectDescription,
-    //         reqName: this.state.requesterName,
-    //         reqEmail: this.state.requesterEmail,
-    //         reqPhone: this.state.requesterPhone,
-    //         reqBudget: this.state.requesterBudget,
-    //         projNotes: this.state.projectNotes
-    //     }
-
-    //     console.log("You've submitted your request!")
-    //     console.log(requestData)
-
-    //     API.submitRequest({
-    //         projName: this.state.projectName,
-    //         projDesc: this.state.projectDescription,
-    //         reqName: this.state.requesterName,
-    //         reqEmail: this.state.requesterEmail,
-    //         reqPhone: this.state.requesterPhone,
-    //         reqBudget: this.state.requesterBudget,
-    //         projNotes: this.state.projectNotes
-    //     })
-    //         .then(res => {
-    //             alert("Youre request has been submitted!")
-    //         })
-    //         .catch(err => {
-    //             alert("There was a problem processing your request, please make sure all forms are filled out or call 610-299-9918 to speak to Evan")
-    //         })
-
-    // }
-
-    loginAdmin = (event) => {
-        event.preventDefault()
-        console.log(this.state.adminName)
-        console.log(this.state.adminPassword)
-        if (this.state.adminName === "evancleary@1creative.com" && this.state.adminPassword === "YKi34709") {
-            document.location.href = '/xbyMGrZ4XIFuk2GiPHta'
-        } else if (this.state.admin !== "evancleary" && this.state.adminPassword !== "YKi34709") {
-            alert("You input the wrong information!")
-        } else {
-            alert("Error")
-        }
-    }
-
-    reRoute = (url) => {
-        // event.preventDefault();
-
-        window.location.href = url
-    }
-
 
     render() {
         return (
@@ -230,7 +161,7 @@ class LandingPage extends Component {
                             </div>
                             <div className="card-body">
 
-
+                                {/* This is the first thing shown, a Zipcode Input */}
                                 <div className="row">
                                     <div className="col-12">
                                         <form>
@@ -241,6 +172,7 @@ class LandingPage extends Component {
 
                                 </div>
 
+                                {/* This displays the City and State if they exist in the component's State, triggered after selection or API return of 1 item */}
                                 <div className="row">
                                     <div className="col-12">
                                         {this.state.city ?
@@ -249,6 +181,8 @@ class LandingPage extends Component {
                                     </div>
                                 </div>
 
+
+                                {/* This is the input for the Street address, it only populates when the City of the City/State data returns */}
                                 <div className="row">
                                     <div className="col-12">
                                         {this.state.city ?
@@ -275,7 +209,7 @@ class LandingPage extends Component {
                                 </div>
 
                                
-
+                                {/* This lays out the options for the cities */}
                                 <div className="row">
                                     {this.state.zipOptions ?
                                         <>
@@ -294,15 +228,17 @@ class LandingPage extends Component {
                                         : null}
                                 </div>
 
+                                {/* This is where the Map component lives, brought by Google Maps. It only exists after the Geocoder API sets the Component State's 'addLat and addLong' */}
                                 <div className="row">
                                     <div className="col-12" style={{width: '500px', height: '500px'}}>
                                         {this.state.showMap ? 
 
                                         <GoogleMapReact
-                                            bootstrapURLKeys={ {key: 'AIzaSyDZaPFIcx5Rcb3LH6NME4Z6-_wBjr2K338'}}
+                                            bootstrapURLKeys={ {key: '[API KEY]'}}
                                             defaultCenter={{ lat: 39.952583, lng: -75.165222}}
                                             defaultZoom={5}
                                         >
+                                            {/* This is the marker and is displayed using the Lat / Lng gathered from the Geocoder API */}
                                             <Marker lat={this.state.addLat} lng={this.state.addLong} text="Address Searched"/>
 
                                         </GoogleMapReact>
@@ -325,44 +261,7 @@ class LandingPage extends Component {
 
 
 
-                {/* Admin Login Modal */}
-
-                <Modal
-                    isOpen={this.state.adminModalIsOpen}
-                    onAfterOpen={this.afterOpenEditModal}
-                    onRequestClose={this.closeAdminModal}
-                    style={customStyles}
-                    contentLabel={"Make your request here!"}
-                    ariaHideApp={false}
-                >
-                    <div className="card" style={{ overflow: 'auto' }}>
-                        <div className="card-header" style={{ textAlign: 'center' }}>
-                            <h3>--------Admin Login--------</h3>
-                            <button className="btn btn-sm btn-secondary" onClick={this.closeEditModal}>Exit</button>
-                        </div>
-                        <div className="card-body" style={{ height: '500px', overflow: 'auto' }}>
-                            <form>
-                                <label>Username</label>
-                                <br />
-                                <input className="form-group" type="text" value={this.state.adminName} onChange={this.handleInputChange} name="adminName" />
-                                <br />
-
-                                <label>Password</label>
-                                <br />
-                                <input className="form-group" type="password" value={this.state.adminPassword} onChange={this.handleInputChange} name="adminPassword" />
-                                <br />
-
-
-                                <button className="btn btn-success" onClick={this.loginAdmin}>Log In</button>
-
-                            </form>
-
-                        </div>
-
-
-                    </div>
-
-                </Modal>
+              
             </div >
 
 
