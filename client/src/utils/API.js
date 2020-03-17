@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default {
-  findZip: function(data) {
-    return axios.get("/api/zips", data)
+  findZip: function(zip) {
+    return axios.get("/api/zipcodes/find/" + zip)
   }
 };

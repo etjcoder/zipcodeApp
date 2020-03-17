@@ -1,13 +1,11 @@
 const router = require("express").Router();
-const adminRoutes = require("./admins");
-const requestRoutes = require("./requests");
-const quoteRoutes = require("./quotes");
+
+const zipcodeRoutes = require("./zipcodes");
 
 // Book routes
 
-router.use("/admins", adminRoutes);
-router.use("/requests", requestRoutes);
-router.use("/quotes", quoteRoutes);
+
+router.use("/zipcodes", zipcodeRoutes);
 
 
 

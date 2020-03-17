@@ -30,8 +30,8 @@ class LandingPage extends Component {
         const { name, value } = event.target;
         this.setState({
             [name]: value
-        },
-        setTimeout(() => {this.handleInputCheck()}, 500))
+        })
+        setTimeout(() => {this.handleInputCheck()}, 500)
     };
 
     handleInputCheck = () => {
